@@ -98,7 +98,7 @@ pub fn message(input: TokenStream) -> TokenStream {
     };
 
     let mut output = quote! {
-            use ai_utils::Message;
+            use openai_utils::Message;
             Message::new(#m_type)
     };
 
@@ -204,7 +204,7 @@ pub fn ai_agent(input: TokenStream) -> TokenStream {
     let model = input.model;
 
     let mut b = quote! {
-        ai_utils::AiAgent::new(#model)
+        openai_utils::AiAgent::new(#model)
     };
 
     if let Some(messages) = input.messages {
