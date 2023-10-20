@@ -361,16 +361,16 @@ pub fn from_agents(input: TokenStream) -> TokenStream {
 
     let o = match memoized {
         true => quote! {
-            #[derive(ai_macros::Memoize, Default)]
+            #[derive(openai_macros::Memoize, Default)]
             struct #name {
                 memo: Option<#output_type>,
             }
 
-            impl ai_utils::MemoizedAgent for #name {
+            impl openai_utils::MemoizedAgent for #name {
                 type Input = #input_type;
 
                 async fn computation(&mut self, input: Self::Input) -> Self::Output {
-                    use ai_macros::evaluate_chain;
+                    use openai_macros::evaluate_chain;
                     evaluate_chain!(input; #agents)
                 }
             }
@@ -379,12 +379,12 @@ pub fn from_agents(input: TokenStream) -> TokenStream {
             #[derive(Default)]
             struct #name;
 
-            impl ai_utils::Agent for #name {
+            impl openai_utils::Agent for #name {
                 type Input = #input_type;
                 type Output = #output_type;
 
                 async fn compute(&mut self, input: Self::Input) -> Self::Output {
-                    use ai_macros::evaluate_chain;
+                    use openai_macros::evaluate_chain;
                     evaluate_chain!(input; #agents)
                 }
             }
@@ -459,7 +459,7 @@ pub fn memoized(input: TokenStream) -> TokenStream {
 
     let struct_name = input.ident;
     let ty = match &ty {
-        syn::Type::Path(type_path) => {
+        Type::Path(type_path) => {
             // Check if the field type is Option<T>
             if let Some(segment) = type_path.path.segments.last() {
                 if segment.ident == "Option" {
@@ -483,7 +483,7 @@ pub fn memoized(input: TokenStream) -> TokenStream {
         _ => panic!("Invalid field type for memoization. Expected Option<TheTypeWeWant>.")
     };
     let output = quote! {
-        impl ai_utils::Memoized for #struct_name {
+        impl openai_utils::Memoized for #struct_name {
             type Output = #ty;
 
             fn field(&mut self) -> Option<&mut Self::Output> {

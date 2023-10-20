@@ -2,6 +2,8 @@
 name = "openai-macros"
 version = "0.1.0"
 edition = "2021"
+description = "macros for the openai-utils crate"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -11,4 +13,4 @@ proc-macro = true
 proc-macro2 = "1.0.68"
 syn = { version = "2.0.38", features = ["full"] }
 quote = "1.0.33"
-ai-utils = { path = "../openai-utils" }
+openai-utils = "0.1.0"
