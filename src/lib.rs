@@ -1,12 +1,9 @@
 use proc_macro::TokenStream;
-use syn::spanned::Spanned;
 use proc_macro2::Ident;
 use quote::{quote, ToTokens};
 use syn::parse::{Parse, ParseStream};
-use syn::{Data, DeriveInput, Fields, FieldValue, Type};
+use syn::FieldValue;
 use syn::{parse, parse_macro_input, Expr, Member, Token};
-use syn::punctuated::Punctuated;
-use syn::token::Colon;
 
 enum MessageType {
     Assistant,
@@ -62,7 +59,7 @@ impl Parse for Message {
                 } else {
                     return Err(input.error("message type not specified"));
                 };
-                let f_val: proc_macro::TokenStream = field.expr.clone().into_token_stream().into();
+                let f_val: TokenStream = field.expr.clone().into_token_stream().into();
                 let m_type = parse(f_val)?;
                 m_type
             },
@@ -163,7 +160,7 @@ impl Parse for AiAgent {
                 .collect::<Vec<FieldValue>>();
             if fields.len() == 1 {
                 let field = fields[0].clone();
-                let f_val: proc_macro::TokenStream = field.expr.clone().into_token_stream().into();
+                let f_val: TokenStream = field.expr.clone().into_token_stream().into();
                 parse(f_val)
             } else {
                 Err(input.error(format!("'{}' field not specified", l)))
